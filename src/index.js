@@ -14,7 +14,7 @@ export default function App() {
    return (
       <View style={styles.container}>
          <Text>Agora a parada ficou seria!</Text>
-         <Text>Abaixo2</Text>
+         <Text>Abaixo4</Text>
       </View>
    );
 }
