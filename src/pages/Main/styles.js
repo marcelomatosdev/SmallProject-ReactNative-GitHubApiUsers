@@ -31,6 +31,7 @@ export const SubmitButton = styled(RectButton)`
    border-radius: 4px;
    margin-left: 10px;
    padding: 0 12px;
+   opacity: ${props => (props.loading ? 0.7 : 1)};
 `;
 
 export const List = styled.FlatList.attrs({
@@ -51,7 +52,7 @@ export const Avatar = styled.Image`
    background: #eee;
 `;
 
-export const Name = styled.text`
+export const Name = styled.Text`
    font-size: 14px;
    color: #333;
    font-weight: bold;
@@ -59,7 +60,7 @@ export const Name = styled.text`
    text-align: center;
 `;
 
-export const Bio = styled.text.attrs({
+export const Bio = styled.Text.attrs({
    numberOfLines: 2,
 })`
    font-size: 13px;
