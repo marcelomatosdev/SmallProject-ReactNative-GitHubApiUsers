@@ -1,7 +1,11 @@
+/* eslint-disable react/static-property-placement */
+/* eslint-disable react/sort-comp */
 import React, { Component } from 'react';
-import { Keyboard, ActivityIndicator } from 'react-native';
+import PropTypes from 'prop-types';
+import { AsyncStorage, Keyboard, ActivityIndicator } from 'react-native';
 import Icon from '@expo/vector-icons/MaterialIcons';
 
+// import { throws } from 'assert';
 import api from '../../services/api';
 import {
    Container,
@@ -18,11 +22,37 @@ import {
 } from './styles';
 
 export default class Main extends Component {
+   static navigationOptions = {
+      title: 'GitHub Users',
+   };
+
+   static propTypes = {
+      navigation: PropTypes.shape({
+         navigate: PropTypes.func,
+      }).isRequired,
+   };
+
    state = {
       newUser: '',
       users: [],
       loading: false,
    };
+
+   async componentDidMount() {
+      const users = await AsyncStorage.getItem('users');
+
+      if (users) {
+         this.setState({ users: JSON.parse(users) });
+      }
+   }
+
+   async componentDidUpdate(_, prevState) {
+      const { users } = this.state;
+
+      if (prevState.users !== users) {
+         AsyncStorage.setItem('users', JSON.stringify(users));
+      }
+   }
 
    handleAddUser = async () => {
       const { users, newUser } = this.state;
@@ -45,6 +75,12 @@ export default class Main extends Component {
       });
 
       Keyboard.dismiss();
+   };
+
+   hadleNavigate = user => {
+      const { navigation } = this.props;
+
+      navigation.navigate('User', { user });
    };
 
    render() {
@@ -78,7 +114,7 @@ export default class Main extends Component {
                      <Name>{item.name}</Name>
                      <Bio>{item.bio}</Bio>
 
-                     <ProfileButton onPress={() => {}}>
+                     <ProfileButton onPress={() => this.hadleNavigate(item)}>
                         <ProfileButtonText>Ver Perfil</ProfileButtonText>
                      </ProfileButton>
                   </User>
@@ -88,7 +124,3 @@ export default class Main extends Component {
       );
    }
 }
-
-Main.navigationOptions = {
-   title: 'GitHub Users',
-};
